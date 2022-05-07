@@ -1,0 +1,37 @@
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                <div class="sb-sidenav-menu-heading">เมนูหลัก</div>  
+                <a class="nav-link <%= isLogin  ? '' : 'd-none' %>" href="/account"><div class="sb-nav-link-icon"><i class="fas fa-id-badge"></i></div>ข้อมูลส่วนตัว</a>
+                <div class="sb-sidenav-menu-heading <%= isLogin && isStudent ? '' : 'd-none' %> ">การลงทะเบียน</div>
+                <a class="nav-link <%= isLogin && isStudent ? '' : 'd-none' %>" href="/student-classrooms"><div class="sb-nav-link-icon"><i class="fas fa-users"></i></div> ห้องเรียนของฉัน</a>
+                <a class="nav-link <%= isLogin && isStudent ? '' : 'd-none' %> " href="/classrooms"><div class="sb-nav-link-icon"><i class="fas fa-table"></i></div> หลักสูตรที่เปิด</a>
+
+                <div class="sb-sidenav-menu-heading <%= isLogin && isTeacher ? '' : 'd-none' %>">จัดการหลักสูตร</div>
+                <a class="nav-link <%= isLogin && isTeacher ? '' : 'd-none' %>" href="/add-classroom"><div class="sb-nav-link-icon"><i class="fas fa-table"></i></div> สร้างหลักสูตร</a>
+                <a class="nav-link <%= isLogin && isTeacher ? '' : 'd-none' %>" href="/my-classrooms"> <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div> หลักสูตรของฉัน</a>
+
+                <a class="nav-link <%= isLogin ? 'd-none' : '' %>" href="/login">
+                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                    เข้าสู่ระบบ
+                </a>
+                <a class="nav-link <%= isLogin ? 'd-none' : '' %>" href="/register">
+                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                    ลงทะเบียน
+                </a>
+                <a class="nav-link <%= isLogin ? '' : 'd-none' %>" href="/announcement"><div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div> ประกาศจากระบบ</a>
+                <a class="nav-link <%= isLogin ? '' : 'd-none' %>" href="/terms"><div class="sb-nav-link-icon"><i class="fas fa-info-circle"></i></div>เงื่อนไขการใช้บริการ</a>
+                <a class="nav-link <%= isLogin ? '' : 'd-none' %>" href="/securitypolicy"><div class="sb-nav-link-icon"><i class="fas fa-website-shield"></i></div>นโยบายความปลอดภัย</a>
+                <a class="nav-link <%= isLogin ? '' : 'd-none' %>" href="/pdpapolicy"><div class="sb-nav-link-icon"><i class="fas fa-user-shield"></i></div>นโยบายความเป็นส่วนตัว</a>
+                <a class="nav-link <%= isLogin ? '' : 'd-none' %>" href="/logout"><div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
+                    ออกจากระบบ
+                </a>
+            </div>
+        </div>
+        <div class="sb-sidenav-footer <%= isLogin ? 'd-block' : 'd-none' %>">
+            <div class="small">Logged in as:</div>
+            <%= user.userFirstname %>
+        </div>
+    </nav>
+</div>

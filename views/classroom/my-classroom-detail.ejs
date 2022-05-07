@@ -1,0 +1,142 @@
+<%- include('../includes/header.ejs') %> <%- include('../includes/nav.ejs') %>
+<style type="text-css"></style>
+<div id="layoutSidenav">
+  <%- include('../includes/menu.ejs') %>
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid">
+        <h1 class="mt-4">
+          <%= pageTitle %>
+        </h1>
+        
+        <% if(errMessage) { %> <%= errMessage %> <% } %>
+        <div class="card-body ">
+          <div class="table-responsive">
+            <table
+              class="table table-bordered"
+              id="dataClass"
+              width="100%"
+              cellspacing="0"
+            >
+              <tbody>
+                <tr>
+                  <td>ชื่อรายวิชา</td>
+                  <td>
+                    <%= classroom.title %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>รายละเอียดรายวิชา</td>
+                  <td>
+                    <%= classroom.description %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>การเข้าร่วม</td>
+                  <td>
+                    <div class="container">
+                      <div class="row">
+                        
+                        <% for(let img of imglist) { %>
+                          <div class="col-sm-4">
+                            <img
+                                id="inputImg"
+                                src="../<%= classroom.id %>/<%= today %>/<%= img %>"
+                                alt="<%= img %>"
+                                width="100%"
+                              />
+                          </div>
+                          <% } %>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>การเข้าร่วม</td> 
+                  <td>
+                    <form
+                      class="mt-4"
+                      method="POST"
+                      action="/upload-attend-pic/<%= classroom.id %>"
+                      enctype="multipart/form-data"
+                    >
+                      <div class="form-group">
+                        <input type="file" name="profile_pic" />
+                        <input
+                          type="hidden"
+                          name="classroomId"
+                          value="<%= classroom.id %>"
+                        />
+                      </div>
+                      <input
+                        type="submit"
+                        name="btn_upload_profile_pic"
+                        value="Upload"
+                      />
+                    </form>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-body">
+          <h4 class="mt-4">
+            รายชื่อผู้ลงทะเบียน
+          </h4>
+          <div class="table-responsive">
+            <table
+              class="table table-bordered"
+              id="dataTable"
+              width="100%"
+              cellspacing="0"
+            >
+            
+              <thead>
+                <tr>
+                  <th>รหัสนักศึกษา</th>
+                  <th>ชื่อนักศึกษา</th>
+                  <th>อีเมลนักศึกษา</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (registrations.length > 0) { %> <% for(let registration of
+                registrations) { %>
+                <tr>
+                  <td>
+                    <%= registration.username %>
+                  </td>
+                  <td>
+                    <%= registration.firstname %> <%= registration.lastname %>
+                  </td>
+                  <td>
+                    <%= registration.email %>
+                  </td>
+                </tr>
+                <% } %> <%} else { %>
+                <tr>
+                  <td colspan="3">No Registration</td>
+                </tr>
+                <% } %>
+              </tbody> 
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="../face-api.js"></script>
+    <!-- <script src="../js/commons.js"></script> -->
+    <script src="../js/faceDetectionControls.js"></script>
+    <script src="../js/imageSelectionControls.js"></script>
+    <!-- <script src="../js/bbt.js"></script> -->
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-2.1.1.min.js"
+    ></script>
+    <script>
+                                  
+    </script>
+    <%- include('../includes/nav-footer.ejs') %>
+  </div>
+</div>
+<%- include('../includes/footer.ejs') %>

@@ -1,0 +1,230 @@
+<%- include('../includes/header.ejs') %> <%- include('../includes/nav.ejs') %>
+<style type="text-css"></style>
+<div id="layoutSidenav">
+  <%- include('../includes/menu.ejs') %>
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid">
+        <h1 class="mt-4">
+          <%= pageTitle %>
+        </h1>
+        <% if(errMessage) { %> <%= errMessage %> <% } %>
+        <div class="card-body ">
+          <div class="table-responsive">
+            <table
+              class="table table-bordered"
+              id="dataClass"
+              width="100%"
+              cellspacing="0"
+            >
+              <tbody>
+                <tr>
+                  <td>ชื่อรายวิชา</td>
+                  <td>
+                    <%= classroom.title %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>รายละเอียดรายวิชา</td>
+                  <td>
+                    <%= classroom.description %>
+                  </td>
+                </tr>
+                <tr>
+                    <td>วันที่ต้องการตรวจสอบ</td>
+                    <td>
+                        <input type="text" id="ddate" name="ddate" value="<%=
+                        moment().format('YYYY-MM-DD');
+                        %>" />
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-body">
+          <h4 class="mt-4">
+            การตรวจสอบการเข้าเรียน
+          </h4>
+          <div class="table-responsive">
+            <!-- <table border="0" cellspacing="5" cellpadding="5">
+              <tbody>
+                <tr>
+                  <td>Date:</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table> -->
+            <table
+              class="table table-bordered"
+              id="dataTable"
+              width="100%"
+              cellspacing="0"
+            >
+              <thead>
+                <tr>
+                  <th>รหัสนักศึกษา</th>
+                  <th>ชื่อนักศึกษา</th>
+                  <th>อีเมลนักศึกษา</th>
+                  <th>เวลาเข้าร่วม</th>
+                  <th>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (attendances.length > 0) { %> <% for(let attendance of
+                attendances) { %>
+                <tr>
+                  <td>
+                
+                    <%= attendance.username %> 
+                  </td>
+                  <td>
+                    <%= attendance.firstname %> <%= attendance.lastname %>
+                  </td>
+                  <td>
+                    <%= attendance.email %>
+                  </td>
+                  <td>
+                    <%=
+                    moment(attendance.attendance.attendanceDate).format('YYYY-MM-DD HH:mm:ss');
+                    %>
+                  </td>
+                  <td>
+                    <% if( moment(attendance.attendance.attendanceDate).format('YYYYMMDD') === moment().format('YYYYMMDD')) {
+                      %>
+                      <a href="/attendance-delete/<%=attendance.attendance._id%>">Remove Attendance</a>
+                      <%
+                    }
+                    %>
+                  </td>
+                </tr>
+                <% } %> <%} else { %>
+                <tr>
+                  <td colspan="5">No Attendance</td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <h4 class="mt-4">
+              รายชื่อผู้ส่งคำขออนุมัติ
+            </h4>
+            <table
+              class="table table-bordered"
+              id="dataTable2"
+              width="100%"
+              cellspacing="0"
+            >
+              <thead>
+                <tr>
+                  <th>รหัสนักศึกษา</th>
+                  <th>ชื่อนักศึกษา</th>
+                  <th>วันที่ส่งคำขออนุมัติ</th>
+                  <th>ภาพถ่ายนักศึกษา</th>
+                  <th>การอนุมัติ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (imglist.length > 0) { %> <% for(let img of
+                  imglist) { 
+                    
+                    im = img.split('.')
+                    %>
+                <tr>
+                  <td><%= im[0] %> แก้นี่ 
+                    
+                  </td>
+                  <td>
+                    แก้นี่ 
+                  </td>
+                  <td> แก้นี่ </td>
+                  <td>
+                    <div class="container">
+                      <div class="row">
+                          <div class="col-sm-4">
+                            <img
+                                id="inputImg"
+                                src="../<%= classroom.id %>/<%= today %>/<%= img %>"
+                                alt="<%= img %>"
+                                width="100%"
+                              />
+                          </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <a class="" href="/classrooms/take_attendance/<%= classroom.id %>/<%= im[0]%>"
+                      >อนุมัติ</a>
+                  </td>
+                </tr>
+                <% } %> <%} else { %>
+                <tr>
+                  <td colspan="5">ไม่มีรายการ</td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <%- include('../includes/nav-footer.ejs') %>
+  </div>
+</div>
+<%- include('../includes/footer.ejs') %>
+<script>
+  function formatDate (date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear()
+
+    if (month.length < 2) month = '0' + month
+    if (day.length < 2) day = '0' + day
+
+    return [year, month, day].join('-')
+  }
+
+  var dDate
+
+  // Custom filtering function which will search data in column four between two values
+  $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+    var dd = dDate.val()
+
+    var date = new Date(data[3])
+
+    if ((dd === null) || (formatDate(dd) === formatDate(date)) || (isNaN(dd))) {
+      return true
+    }
+    return false
+  })
+  ;(function ($) {
+    'use strict'
+
+    // Create date inputs
+    dDate = new DateTime($('#ddate'), {
+      format: 'YYYY-MM-DD'
+    })
+
+    // DataTables initialisation
+    var table = $('#dataTable').DataTable()
+
+    // Refilter the table
+    $('#ddate').on('change', function () {
+      table.draw()
+    })
+
+    // $('#ddate').on('keyup', function () {
+    //   table.draw()
+    // })
+
+    $('#ddate').on('keypress', function () {
+      table.draw()
+    })
+
+  })(jQuery)
+</script>
